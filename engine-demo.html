@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlipBook · engine demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./lib/flipbook-tokens.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--ink); font-family: var(--sans);
+    min-height: 100vh; display: flex; flex-direction: column; gap: 16px; padding: 22px;
+  }
+  h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+  h1 b { color: var(--amber); }
+  .sub { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); margin-top: 4px; }
+
+  .bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .bar label { font-family: var(--mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-faint); }
+  .bar input {
+    font-family: var(--mono); font-size: 12px; color: var(--ink);
+    background: var(--panel-2); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 7px 10px;
+  }
+  .bar input[type=text] { width: 210px; }
+
+  .tf { display: inline-flex; background: var(--panel-2); border: 1px solid var(--line); border-radius: 9px; padding: 3px; gap: 2px; }
+  .tf button {
+    font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--ink-faint);
+    background: transparent; border: none; border-radius: 6px; padding: 6px 11px; cursor: pointer; transition: 0.14s;
+  }
+  .tf button:hover { color: var(--ink-dim); }
+  .tf button.on { color: var(--teal); background: var(--teal-soft); }
+
+  .btn {
+    font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--ink-dim);
+    background: var(--panel-2); border: 1px solid var(--line); border-radius: var(--radius-sm);
+    padding: 7px 12px; cursor: pointer; transition: 0.14s;
+  }
+  .btn:hover { color: var(--ink); border-color: var(--ink-faint); }
+
+  .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+  .card { background: var(--panel); border: 1px solid var(--panel-edge); border-radius: var(--radius); padding: 14px; }
+  .card h3 { font-family: var(--mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 10px; }
+  canvas { display: block; width: 100%; }
+  #cMain { height: 360px; }
+  #cCurve { height: 150px; }
+  #cScatter { height: 188px; }
+  .status { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); }
+  .status b { color: var(--teal); }
+  .status.err b { color: var(--rose); }
+  @media (max-width: 880px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+  <div>
+  <div style="display:flex;align-items:flex-start;gap:14px">
+    <div style="flex:1">
+    <h1><a href="index.html" title="Demo home" style="text-decoration:none;color:inherit">Flip<b>Book</b></a> · live chart</h1>
+    <div class="sub">The chart engine on its own, on sample prices. Scroll to zoom, drag to move through time and price, double-click to reset. Try a symbol like SOLUSDT or ETHUSDT.</div>
+    </div>
+    <nav style="display:flex;gap:8px">
+      <a href="dashboard.html" style="font-family:var(--mono);font-size:11px;color:var(--ink-dim);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:6px 11px">Board</a>
+      <a href="engine-demo.html" style="font-family:var(--mono);font-size:11px;color:var(--amber);text-decoration:none;border:1px solid var(--amber);border-radius:8px;padding:6px 11px">Live chart</a>
+      <a href="flipbook.html" style="font-family:var(--mono);font-size:11px;color:var(--ink-dim);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:6px 11px">Flipbook</a>
+      <a href="tracking.html" style="font-family:var(--mono);font-size:11px;color:var(--ink-dim);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:6px 11px">Tracking</a>
+      <a href="divergent.html" style="font-family:var(--mono);font-size:11px;color:var(--ink-dim);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:6px 11px">Divergent</a>
+    </nav>
+  </div>
+  </div>
+
+  <div class="bar">
+    <input id="api" type="hidden" value="">
+    <label>Symbol</label>
+    <input id="sym" type="text" value="BERAUSDT" style="width:130px">
+    <span class="tf" id="tf">
+      <button data-tf="3m" class="on">3m</button>
+      <button data-tf="15m">15m</button>
+      <button data-tf="1h">1h</button>
+      <button data-tf="4h">4h</button>
+      <button data-tf="1d">1D</button>
+    </span>
+    <label>overlay</label>
+    <span class="tf" id="ov">
+      <button data-ov="0" class="on">off</button>
+      <button data-ov="5">15m</button>
+      <button data-ov="20">1h</button>
+      <button data-ov="80">4h</button>
+    </span>
+    <button class="btn" id="reload">Reload</button>
+    <span class="status" id="status">idle</span>
+  </div>
+
+  <div class="card">
+    <h3>Live chart · candles + last-price + TF overlay</h3>
+    <canvas id="cMain"></canvas>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Accuracy curve (sample — fed by graded entries later)</h3>
+      <canvas id="cCurve"></canvas>
+    </div>
+    <div class="card">
+      <h3>Calibration scatter (sample)</h3>
+      <canvas id="cScatter"></canvas>
+    </div>
+  </div>
+
+<script type="module">
+  import * as Charts from './lib/chart-engine.js';
+  import { mountSettings } from './lib/settings-ui.js';
+  import { API_BASE, SAMPLE_ONLY } from './lib/config.js';
+  mountSettings(document.querySelector('nav'));
+  import {
+    fetchKlines, syntheticSeries, createPoller, LIVE_POLL_MS,
+    loadInstruments, resolveInstrument, dpForPrice, SOURCE_LABEL,
+  } from './lib/data-adapter.js';
+
+  const $ = id => document.getElementById(id);
+  $('api').value = API_BASE ?? '';
+  if (SAMPLE_ONLY) $('api').placeholder = 'demo: sample data';
+  const state = { interval: '3m', overlay: 0, candles: [], dp: 4 };
+  let poller = null, loadSeq = 0;
+
+  Charts.register($('cMain'), (ctx, w, h) =>
+    Charts.candles(ctx, w, h, state.candles, { overlay: state.overlay, dp: state.dp }));
+  Charts.enableZoom($('cMain'));   // scroll to zoom · drag to pan · double-click to reset
+
+  // sample analytics (these get real data once journaling + grading land)
+  const accPts = Array.from({ length: 24 }, (_, i) => ({ v: 50 + 18 * Math.sin(i / 3) + i * 0.6 }));
+  Charts.register($('cCurve'), (ctx, w, h) => Charts.curve(ctx, w, h, accPts, { color: Charts.THEME.teal }));
+
+  let sd = 7; const rnd = () => { sd = (sd * 1664525 + 1013904223) & 0xffffffff; return (sd >>> 0) / 0xffffffff; };
+  const scatterPts = Array.from({ length: 60 }, () => {
+    const x = 45 + rnd() * 48, hit = rnd() < (x - 30) / 80;
+    return { x, y: hit ? 100 : 0, verdict: hit ? 'hit' : (rnd() < 0.4 ? 'partial' : 'miss') };
+  });
+  const bins = [50, 60, 70, 80, 90].map(x => ({ x, y: Math.min(95, x - 6 + rnd() * 8) }));
+  Charts.register($('cScatter'), (ctx, w, h) => Charts.scatter(ctx, w, h, scatterPts, { bins }));
+
+  const setStatus = (t, cls = '') => { const el = $('status'); el.className = 'status ' + cls; el.innerHTML = cls === 'ok' ? `<b>${t}</b>` : t; };
+  function showSynthetic(sym, note) {
+    const ref = resolveInstrument(sym);
+    state.candles = syntheticSeries({ n: 240, base: ref.base, seed: ref.seed, vol: ref.vol, ramp: 1.2 });
+    Charts.refreshAll();
+    setStatus(note || `synthetic · ${state.candles.length} candles`, 'err');
+  }
+
+  async function load() {
+    poller?.stop();
+    const apiBase = $('api').value.trim() || null;   // empty = demo mode, straight from the exchange
+    const symbol = $('sym').value.trim().toUpperCase();
+
+    const seq = ++loadSeq;
+    await loadInstruments(apiBase);            // so we know which exchange lists it
+    if (seq !== loadSeq) return;               // a newer load() superseded this one
+    const ins = resolveInstrument(symbol);
+    state.dp = ins.dp ?? 4;
+
+    let gotData = false;
+    poller = createPoller(async (signal) => {
+      setStatus('fetching…');
+      try {
+        const data = await fetchKlines({ apiBase, symbol: ins.pair, interval: state.interval, limit: 240, source: ins.source, signal });
+        if (!data.length) throw new Error('empty');
+        if (ins.dp == null) state.dp = dpForPrice(data.at(-1).c);
+        state.candles = data; gotData = true;
+        Charts.refreshAll();
+        setStatus(`live · ${SOURCE_LABEL[data.source || ins.source]} · ${data.length} candles · ${state.interval} · every ${LIVE_POLL_MS / 1000}s`, 'ok');
+      } catch (e) {
+        if (e.name === 'AbortError') return;
+        if (!gotData) showSynthetic(symbol, `${apiBase ? 'server' : 'exchange'} unreachable — showing sample data`);
+        throw e;
+      }
+    }, { intervalMs: LIVE_POLL_MS });
+  }
+
+  $('tf').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    $('tf').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+    state.interval = b.dataset.tf; load();
+  });
+  $('ov').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    $('ov').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+    state.overlay = +b.dataset.ov; Charts.refreshAll();
+  });
+  $('reload').addEventListener('click', load);
+
+  load();
+</script>
+</body>
+</html>

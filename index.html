@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlipBook · demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./lib/flipbook-tokens.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--sans); min-height: 100vh; }
+  main { max-width: 760px; margin: 0 auto; padding: 48px 20px 64px; }
+  .logo { font-family: var(--mono); font-size: 30px; font-weight: 700; letter-spacing: -0.5px; }
+  .logo b { color: var(--amber); }
+  .lede { margin-top: 12px; font-size: 16px; line-height: 1.55; color: var(--ink-dim); max-width: 600px; }
+  .note { margin-top: 18px; display: inline-flex; gap: 8px; align-items: center; font-family: var(--mono); font-size: 11px; letter-spacing: .3px; color: var(--teal); background: var(--teal-soft); border: 1px solid var(--teal); border-radius: 8px; padding: 7px 11px; }
+  h2 { margin: 40px 0 14px; font-family: var(--mono); font-size: 10px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--ink-faint); font-weight: 600; }
+  .cards { display: grid; gap: 12px; }
+  a.card { display: block; text-decoration: none; color: inherit; background: var(--panel); border: 1px solid var(--panel-edge); border-radius: 13px; padding: 18px 20px; transition: border-color .15s, transform .15s; }
+  a.card:hover { border-color: var(--amber); transform: translateY(-1px); }
+  .card .top { display: flex; align-items: baseline; gap: 10px; }
+  .card h3 { font-family: var(--mono); font-size: 15px; font-weight: 700; color: var(--amber); }
+  .card .tag { font-family: var(--mono); font-size: 10px; color: var(--ink-faint); }
+  .card .go { margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--ink-faint); }
+  .card p { margin-top: 8px; font-size: 14px; line-height: 1.55; color: var(--ink-dim); }
+  .card .try { margin-top: 10px; font-family: var(--mono); font-size: 11.5px; line-height: 1.5; color: var(--ink-faint); }
+  .card .try b { color: var(--teal); font-weight: 600; }
+  footer { margin-top: 36px; font-size: 12.5px; line-height: 1.6; color: var(--ink-faint); }
+</style>
+</head>
+<body>
+<main>
+  <div class="logo">Flip<b>Book</b></div>
+  <p class="lede">A trading journal for people with day jobs. Look at a chart, write down what you think happens next, then see what actually happened, one step at a time, and get your call graded.</p>
+  <span class="note">● Demo: sample prices, no sign-in, nothing to install</span>
+
+  <h2>Try the features</h2>
+  <div class="cards">
+    <a class="card" href="flipbook.html">
+      <div class="top"><h3>Flipbook</h3><span class="tag">backtest</span><span class="go">open →</span></div>
+      <p>Six charts of the same coin, T−5 to T, each a step later in time: a fixed gap (1 hour to 1 week) or one trading session per chart (Asia, London, New York or the weekend).</p>
+      <p class="try"><b>Try:</b> set Track to <b>Asia</b>, double-click the first chart to journal a prediction, then click the glowing chart it lands on and press <b>Grade this call</b>. Use ← → to step through the charts.</p>
+    </a>
+    <a class="card" href="tracking.html">
+      <div class="top"><h3>Tracking</h3><span class="tag">forward</span><span class="go">open →</span></div>
+      <p>Start a track and FlipBook captures T now, then T+1 … T+5 as time passes, so you can predict the future and check yourself later.</p>
+      <p class="try"><b>Try:</b> choose Track <b>Demo · 1-min steps</b> and press <b>Start tracking</b>. The next charts fill in a minute apart.</p>
+    </a>
+    <a class="card" href="dashboard.html">
+      <div class="top"><h3>Board</h3><span class="tag">analytics</span><span class="go">open →</span></div>
+      <p>Your graded calls turned into a scorecard: accuracy over time, whether your confidence matches your results, expectancy and streaks.</p>
+      <p class="try"><b>Try:</b> switch between <b>Command</b>, <b>Focus</b> and <b>Stream</b> layouts.</p>
+    </a>
+    <a class="card" href="divergent.html">
+      <div class="top"><h3>Divergent</h3><span class="tag">correlation</span><span class="go">open →</span></div>
+      <p>Four coins over the same window, each marked as moving with, loosely with, or against the main one.</p>
+      <p class="try"><b>Try:</b> swap a coin with the dropdown above any of the other three charts.</p>
+    </a>
+    <a class="card" href="engine-demo.html">
+      <div class="top"><h3>Live chart</h3><span class="tag">charting</span><span class="go">open →</span></div>
+      <p>The chart engine on its own: timeframes, higher-timeframe overlays, zoom and pan.</p>
+      <p class="try"><b>Try:</b> scroll to zoom, drag to move through time and price, and turn on the <b>1h</b> overlay.</p>
+    </a>
+  </div>
+
+  <footer>Prices in this demo are generated, not real market data, so every feature works without an exchange connection. Anything you journal or track is saved only in your own browser. Candle colours and trading sessions can be customised with the ⚙ buttons.</footer>
+</main>
+</body>
+</html>

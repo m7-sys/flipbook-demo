@@ -1,0 +1,40 @@
+/* ============================================================================
+   FlipBook · design tokens
+   Single source of truth for the dark-terminal identity. Import once at the
+   app root; every view reads these vars. Mirrors THEME in chart-engine.js.
+     amber = signature / active   ·   teal = AI / hit / positive   ·   rose = miss
+   ========================================================================== */
+:root {
+  /* surfaces */
+  --bg:         #0b0d10;
+  --panel:      #0f1318;
+  --panel-2:    #11161c;
+  --panel-edge: #1a2027;
+  --line:       #262e37;
+  --grid:       #161b21;
+
+  /* ink */
+  --ink:        #e8edf2;
+  --ink-dim:    #8a96a3;
+  --ink-faint:  #566270;
+
+  /* accents */
+  --amber:      #e8b84b;
+  --amber-soft: rgba(232, 184, 75, 0.10);
+  --teal:       #39d3c3;
+  --teal-soft:  rgba(57, 211, 195, 0.10);
+  --rose:       #e8584b;
+  --rose-soft:  rgba(232, 88, 75, 0.10);
+
+  /* candles */
+  --candle-up:   #e8b84b;
+  --candle-down: #e7e9ec;
+
+  /* type */
+  --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+
+  /* shape */
+  --radius:    12px;
+  --radius-sm: 8px;
+}
