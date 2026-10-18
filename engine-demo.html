@@ -6,7 +6,7 @@
 <title>FlipBook · engine demo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./lib/flipbook-tokens.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -16,6 +16,7 @@
   }
   h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
   h1 b { color: var(--amber); }
+  .logo { font-family: var(--logo); color: inherit; text-decoration: none; }
   .sub { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); margin-top: 4px; }
 
   .bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -58,7 +59,7 @@
   <div>
   <div style="display:flex;align-items:flex-start;gap:14px">
     <div style="flex:1">
-    <h1><a href="index.html" title="Demo home" style="text-decoration:none;color:inherit">Flip<b>Book</b></a> · live chart</h1>
+    <h1><a class="logo" href="index.html" title="Demo home" style="text-decoration:none;color:inherit">Flip<b>Book</b></a> · live chart</h1>
     <div class="sub">The chart engine on its own, on sample prices. Scroll to zoom, drag to move through time and price, double-click to reset. Try a symbol like SOLUSDT or ETHUSDT.</div>
     </div>
     <nav style="display:flex;gap:8px">

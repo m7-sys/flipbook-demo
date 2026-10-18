@@ -31,10 +31,14 @@
   --candle-down: #e7e9ec;
 
   /* type */
-  --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-  --sans: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  --sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --mono: var(--sans);   /* labels & figures share the UI face */
+  --logo: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
   /* shape */
   --radius:    12px;
   --radius-sm: 8px;
 }
+
+/* form controls follow the page font unless a view sets one */
+:where(button, input, select, textarea) { font-family: inherit; }
