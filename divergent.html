@@ -33,6 +33,7 @@
       <a href="flipbook.html">Flipbook</a>
       <a href="tracking.html">Tracking</a>
       <a href="divergent.html" class="on">Divergent</a>
+      <a href="audio.html">Audio reader</a>
     </nav>
   </header>
 
@@ -43,11 +44,13 @@
   import { requireAuth, mountUserChip } from './lib/auth-ui.js';
   import { initPrefsSync } from './lib/prefs-sync.js';
   import { mountSettings } from './lib/settings-ui.js';
+  import { mountAudioReader } from './lib/audio-reader.js';
   import { API_BASE as apiBase } from './lib/config.js';   // the FlipBook server, or null for demo mode
   requireAuth(apiBase).then(async () => {
     await initPrefsSync(apiBase);
     mountDivergent(document.getElementById('view-divergent'), { apiBase });
     mountSettings(document.querySelector('nav'));
+    mountAudioReader(document.querySelector('nav'), { apiBase });
     mountUserChip(document.querySelector('nav'), apiBase);
   });
 </script>

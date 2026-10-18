@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlipBook · audio reader</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./lib/flipbook-tokens.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { min-height: 100%; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--sans); }
+  header { display: flex; align-items: center; gap: 14px; padding: 12px 20px; border-bottom: 1px solid var(--panel-edge); background: var(--panel); }
+  .logo { font-family: var(--mono); font-size: 16px; font-weight: 700; letter-spacing: -0.3px; text-decoration: none; color: inherit; }
+  .logo b { color: var(--amber); }
+  .slogan { font-size: 11px; color: var(--ink-faint); }
+  nav { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  nav a { font-family: var(--mono); font-size: 11px; color: var(--ink-dim); text-decoration: none; border: 1px solid var(--line); border-radius: 8px; padding: 6px 11px; }
+  nav a:hover { color: var(--ink); border-color: var(--ink-faint); }
+  nav a.on { color: var(--amber); border-color: var(--amber); }
+
+  main { max-width: 720px; margin: 0 auto; padding: 40px 20px 60px; }
+  .eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--teal); }
+  h1 { margin-top: 8px; font-family: var(--mono); font-size: 26px; letter-spacing: -0.4px; }
+  .lede { margin-top: 12px; font-size: 15.5px; line-height: 1.6; color: var(--ink-dim); }
+  .quote { margin-top: 18px; font-family: var(--mono); font-size: 14px; color: var(--ink); background: var(--panel); border: 1px solid var(--panel-edge); border-left: 3px solid var(--teal); border-radius: 10px; padding: 14px 16px; }
+
+  .card { margin-top: 26px; background: var(--panel); border: 1px solid var(--panel-edge); border-radius: 14px; padding: 20px; }
+  .card h2 { font-family: var(--mono); font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--ink-faint); font-weight: 600; margin-bottom: 14px; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .row > span { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); min-width: 54px; }
+  .chips, .seg { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips button, .seg button { font-family: var(--mono); font-size: 11.5px; font-weight: 600; color: var(--ink-faint); background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 7px 11px; cursor: pointer; }
+  .chips button.on { color: var(--amber); border-color: var(--amber); background: var(--amber-soft); }
+  .seg button.on { color: var(--teal); border-color: var(--teal); background: var(--teal-soft); }
+  .play { margin-top: 4px; display: inline-flex; align-items: center; gap: 9px; font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--bg); background: var(--teal); border: none; border-radius: 10px; padding: 11px 18px; cursor: pointer; }
+  .play:hover { filter: brightness(1.06); }
+  .log { margin-top: 18px; display: flex; flex-direction: column; gap: 8px; }
+  .log div { font-family: var(--mono); font-size: 12.5px; color: var(--ink-dim); border-left: 2px solid var(--line); padding-left: 10px; }
+  .log div b { color: var(--ink-faint); font-weight: 500; margin-right: 8px; }
+  .log div:first-child { color: var(--ink); border-left-color: var(--teal); }
+  .hint { margin-top: 14px; font-size: 12.5px; line-height: 1.55; color: var(--ink-faint); }
+
+  ul.points { margin-top: 26px; list-style: none; display: grid; gap: 10px; }
+  ul.points li { font-size: 14px; line-height: 1.55; color: var(--ink-dim); padding-left: 18px; position: relative; }
+  ul.points li::before { content: "▸"; position: absolute; left: 0; color: var(--amber); }
+  ul.points b { color: var(--ink); font-weight: 600; }
+</style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html" title="Demo home">Flip<b>Book</b></a>
+    <span class="slogan">The market never sleeps, neither should your journal.</span>
+    <nav>
+      <a href="dashboard.html">Board</a>
+      <a href="engine-demo.html">Live chart</a>
+      <a href="flipbook.html">Flipbook</a>
+      <a href="tracking.html">Tracking</a>
+      <a href="divergent.html">Divergent</a>
+      <a href="audio.html" class="on">Audio reader</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="eyebrow">Feature</div>
+    <h1>🔊 Audio reader</h1>
+    <p class="lede">Hear the price without looking at the screen. FlipBook reads the price of the coin you're viewing aloud every 1, 3 or 5 minutes, on the clock as each candle closes, along with how far it moved over that time.</p>
+    <div class="quote">“BERA, 0.2441. Up 0.32 percent over 5 minutes.”</div>
+
+    <section class="card">
+      <h2>Try it</h2>
+      <div class="row"><span>Coin</span><div class="chips" data-coins></div></div>
+      <div class="row"><span>Every</span><div class="seg" data-every>
+        <button data-m="1">1 min</button><button data-m="3">3 min</button><button data-m="5" class="on">5 min</button>
+      </div></div>
+      <button class="play" data-play>▶ Play a readout</button>
+      <div class="log" data-log></div>
+      <p class="hint" data-hint>Turn your sound on. Prices here are sample data.</p>
+    </section>
+
+    <ul class="points">
+      <li>In the app it's the <b>🔊 button in the top bar of every page</b>. Switch it on, pick 1, 3 or 5 minutes, and it keeps reading in the background while the page is open. It's live on this page too.</li>
+      <li>It <b>follows the coin you're looking at</b> in the Flipbook, Tracking or Live chart, so switching coins switches what it reads.</li>
+      <li>Readouts land <b>on the clock</b> (14:25, 14:30, 14:35…), at the moment each candle closes.</li>
+      <li>It uses the browser's built-in voice, so there's nothing to install.</li>
+    </ul>
+  </main>
+
+<script type="module">
+  import { API_BASE as apiBase } from './lib/config.js';
+  import { INSTRUMENTS } from './lib/data-adapter.js';
+  import { priceSentence, mountAudioReader, setReaderAsset } from './lib/audio-reader.js';
+  import { mountUserChip } from './lib/auth-ui.js';
+
+  const nav = document.querySelector('nav');
+  mountAudioReader(nav, { apiBase });
+  mountUserChip(nav, apiBase);
+
+  const $ = s => document.querySelector(s);
+  const state = { coin: 'BERA', mins: 5, text: '' };
+  const COINS = ['BERA', 'SOL', 'HYPE', 'ETH', 'WIF', 'PEPE'].filter(s => INSTRUMENTS.some(i => i.sym === s));
+
+  $('[data-coins]').innerHTML = COINS.map(s => `<button data-coin="${s}" class="${s === state.coin ? 'on' : ''}">${s}</button>`).join('');
+  $('[data-coins]').onclick = e => {
+    const b = e.target.closest('button'); if (!b) return;
+    state.coin = b.dataset.coin; setReaderAsset(state.coin);
+    document.querySelectorAll('[data-coin]').forEach(x => x.classList.toggle('on', x === b));
+    prepare();
+  };
+  $('[data-every]').onclick = e => {
+    const b = e.target.closest('button'); if (!b) return;
+    state.mins = +b.dataset.m;
+    document.querySelectorAll('[data-m]').forEach(x => x.classList.toggle('on', x === b));
+    prepare();
+  };
+
+  // Keep the sentence ready, so the click speaks straight away (phones only allow speech inside the tap).
+  async function prepare() {
+    try { state.text = await priceSentence(state.coin, state.mins, apiBase); } catch { state.text = ''; }
+  }
+  prepare(); setInterval(prepare, 5000);
+
+  $('[data-play]').onclick = async () => {
+    if (!state.text) await prepare();
+    if (!state.text) return void ($('[data-hint]').textContent = "Couldn't get a price just now. Try again in a moment.");
+    const synth = window.speechSynthesis;
+    if (synth && typeof SpeechSynthesisUtterance !== 'undefined') {
+      synth.cancel();
+      const u = new SpeechSynthesisUtterance(state.text); u.lang = 'en-US';
+      synth.speak(u);
+    } else {
+      $('[data-hint]').textContent = "This browser can't speak, but here's what you'd hear:";
+    }
+    const now = new Date();
+    const row = document.createElement('div');
+    row.innerHTML = `<b>${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}</b>`;
+    row.append(state.text);
+    $('[data-log]').prepend(row);
+    while ($('[data-log]').children.length > 4) $('[data-log]').lastChild.remove();
+  };
+  setReaderAsset(state.coin);
+</script>
+</body>
+</html>

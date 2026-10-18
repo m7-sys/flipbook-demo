@@ -13,3 +13,4 @@ This build runs entirely in the browser: no sign-in, no server, and no market-da
 | **Board** | Accuracy, calibration, expectancy and streaks from graded calls. |
 | **Divergent** | Four coins over the same window, marked aligned, loose or divergent. |
 | **Live chart** | The chart engine: timeframes, overlays, zoom and pan. |
+| **Audio reader** | Reads the price of the coin you're viewing aloud every 1, 3 or 5 minutes (the 🔊 button in the top bar). |

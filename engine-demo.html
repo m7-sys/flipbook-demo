@@ -67,6 +67,7 @@
       <a href="flipbook.html" style="font-family:var(--mono);font-size:11px;color:var(--ink-dim);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:6px 11px">Flipbook</a>
       <a href="tracking.html" style="font-family:var(--mono);font-size:11px;color:var(--ink-dim);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:6px 11px">Tracking</a>
       <a href="divergent.html" style="font-family:var(--mono);font-size:11px;color:var(--ink-dim);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:6px 11px">Divergent</a>
+      <a href="audio.html" style="font-family:var(--mono);font-size:11px;color:var(--ink-dim);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:6px 11px">Audio reader</a>
     </nav>
   </div>
   </div>
@@ -113,7 +114,9 @@
   import * as Charts from './lib/chart-engine.js';
   import { mountSettings } from './lib/settings-ui.js';
   import { API_BASE, SAMPLE_ONLY } from './lib/config.js';
+  import { mountAudioReader, setReaderAsset } from './lib/audio-reader.js';
   mountSettings(document.querySelector('nav'));
+  mountAudioReader(document.querySelector('nav'), { apiBase: API_BASE });
   import {
     fetchKlines, syntheticSeries, createPoller, LIVE_POLL_MS,
     loadInstruments, resolveInstrument, dpForPrice, SOURCE_LABEL,
@@ -153,6 +156,7 @@
     poller?.stop();
     const apiBase = $('api').value.trim() || null;   // empty = demo mode, straight from the exchange
     const symbol = $('sym').value.trim().toUpperCase();
+    setReaderAsset(symbol);
 
     const seq = ++loadSeq;
     await loadInstruments(apiBase);            // so we know which exchange lists it
