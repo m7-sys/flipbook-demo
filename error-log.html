@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlipBook · error log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./lib/flipbook-tokens.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--sans); display: flex; flex-direction: column; }
+  header { display: flex; align-items: center; gap: 14px; padding: 12px 20px; border-bottom: 1px solid var(--panel-edge); background: var(--panel); flex: 0 0 auto; }
+  .logo { font-family: var(--logo); font-size: 16px; font-weight: 700; letter-spacing: -0.3px; }
+  .logo b { color: var(--amber); }
+  nav { margin-left: auto; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+  nav a { font-family: var(--mono); font-size: 11px; color: var(--ink-dim); text-decoration: none; border: 1px solid var(--line); border-radius: 8px; padding: 6px 11px; }
+  nav a:hover { color: var(--ink); border-color: var(--ink-faint); }
+  nav a.on { color: var(--amber); border-color: var(--amber); }
+  #view-weekly { flex: 1; min-height: 0; }
+</style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="index.html" title="Demo home" style="text-decoration:none;color:inherit">Flip<b>Book</b></a>
+    <nav>
+      <a href="dashboard.html">Board</a>
+      <a href="engine-demo.html">Live chart</a>
+      <a href="flipbook.html">Flipbook</a>
+      <a href="tracking.html">Tracking</a>
+      <a href="divergent.html">Divergent</a>
+      <a href="tracking-test.html">Tracking Test</a>
+      <a href="error-log.html" class="on">Error Log</a>
+      <a href="audio.html">Audio reader</a>
+    </nav>
+  </header>
+
+  <section id="view-weekly"></section>
+
+<script type="module">
+  import { mountWeekly } from './lib/weekly-view.js';
+  import { requireAuth, mountUserChip } from './lib/auth-ui.js';
+  import { initPrefsSync } from './lib/prefs-sync.js';
+  import { mountSettings } from './lib/settings-ui.js';
+  import { mountAudioReader } from './lib/audio-reader.js';
+  import { API_BASE as apiBase } from './lib/config.js';   // the FlipBook server, or null for demo mode
+  // A predicted week above what actually happened, with corrections.
+  requireAuth(apiBase).then(async () => {
+    await initPrefsSync(apiBase);
+    mountWeekly(document.getElementById('view-weekly'), { apiBase, mode: 'log' });
+    mountSettings(document.querySelector('nav'));
+    mountAudioReader(document.querySelector('nav'), { apiBase });
+    mountUserChip(document.querySelector('nav'), apiBase);
+  });
+</script>
+</body>
+</html>
